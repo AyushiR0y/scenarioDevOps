@@ -1,5 +1,6 @@
-echo plugins {
+plugins {
     id 'java'
+    id 'com.jfrog.artifactory' version '4.33.0'
 }
 
 group = 'com.example'
@@ -17,4 +18,21 @@ tasks.register('buildApp') {
     doLast {
         println 'Building the application...'
     }
-} > build.gradle
+}
+
+// Artifactory Configuration
+artifactory {
+    contextUrl = 'https://trials23t6q.jfrog.io/artifactory/api/generic/scenarioDevOps-releases'  // Replace with your Artifactory URL
+    publish {
+        repository {
+            repoKey = 'scenarioDevOps-releases'  // Replace with your repository key
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+        }
+        defaults {
+            publications ('mavenJava')
+            publishArtifacts = true
+            properties = ['build.name': 'scenarioDevOps', 'build.number': "${System.env.BUILD_NUMBER}"]
+        }
+    }
+}
