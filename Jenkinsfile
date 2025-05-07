@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        ARTIFACTORY_USER = credentials('artifactory-credentials')
+        ARTIFACTORY_PASSWORD = credentials('artifactory-credentials')
+    }
+
     stages {
         stage('Clone Repository') {
             steps {
@@ -19,7 +24,11 @@ pipeline {
         stage('Publish to Artifactory') {
             steps {
                 script {
-                    sh './gradlew artifactoryPublish'
+                    sh '''
+                        ./gradlew artifactoryPublish \
+                        -Partifactory_user=$ARTIFACTORY_USER \
+                        -Partifactory_password=$ARTIFACTORY_PASSWORD
+                    '''
                 }
             }
         }

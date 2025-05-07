@@ -1,14 +1,17 @@
 plugins {
     id 'java'
-    id 'com.jfrog.artifactory' version '4.33.0'
+    id("com.jfrog.artifactory") version "4.4.17"
+}
+
+repositories {
+    mavenCentral()  // Or add jcenter() as an alternative
+    jcenter()       // Add this if it's not already
+    // Add the JFrog Artifactory plugin repository
+    maven { url 'https://plugins.gradle.org/m2/' }
 }
 
 group = 'com.example'
 version = '1.0.0'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     testImplementation 'junit:junit:4.13.2'
@@ -22,15 +25,15 @@ tasks.register('buildApp') {
 
 // Artifactory Configuration
 artifactory {
-    contextUrl = 'https://trials23t6q.jfrog.io/artifactory/api/generic/scenarioDevOps-releases'  // Replace with your Artifactory URL
+    contextUrl = 'https://trials23t6q.jfrog.io/artifactory/api/maven/devops_release'  // Replace with your Artifactory URL
     publish {
         repository {
-            repoKey = 'scenarioDevOps-releases'  // Replace with your repository key
-            username = "${artifactory_user}"
-            password = "${artifactory_password}"
+            repoKey = 'devops_release'  // Replace with your repository key
+            username = "ayushiroy283@gmail.com"
+            password = "cmVmdGtuOjAxOjE3NzgxNzUwNzU6Nkt5YlROQlh0ZTZmamxoaEJjWjdENTlQWHFD"
         }
         defaults {
-            publications ('mavenJava')
+            publications('mavenJava')
             publishArtifacts = true
             properties = ['build.name': 'scenarioDevOps', 'build.number': "${System.env.BUILD_NUMBER}"]
         }
